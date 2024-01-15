@@ -1,24 +1,37 @@
 #!/usr/bin/python3
+""" Script that takes an argument and displays all values
+    in the states table where the name matches with the argument
+"""
 
-'''
-    Same script as 2-my_filter_states.py, but
-    protects against SQL injections.
-'''
-
-import sys
 import MySQLdb
+from sys import argv
 
-if __name__ == '__main__':
-    setUp = MySQLdb.connect(
-        host="localhost", port=3306, user=sys.argv[1],
-        passwd=sys.argv[2], db=sys.argv[3]
+if __name__ == "__main__":
+
+    user_name, password, database, match = argv[1], argv[2], argv[3], argv[4]
+
+    # This establish the connection to the database through the MySQLdb module
+    db = MySQLdb.connect(
+        host="localhost",
+        user=user_name,
+        passwd=password,
+        db=database,
+        port=3306
     )
-    Cursor = setUp.cursor()
-    Cursor.execute("SELECT * FROM states WHERE name LIKE %s ORDER BY \
-    id ASC", (sys.argv[4],))
-    qRows = Cursor.fetchall()
-    for r in qRows:
-        if r[1] == sys.argv[4]:
-            print(r)
-    Cursor.close()
-    setUp.close()
+
+    # This create the working environment using the cursor object
+    cursor_object = db.cursor()
+
+    query = """
+    SELECT * from states
+    WHERE name = %s
+    ORDER BY states.id ASC
+    """
+
+    cursor_object.execute(query, (match,))
+    rows = cursor_object.fetchall()
+    for row in rows:
+        print("{}".format(row))
+
+    cursor_object.close()
+    db.close()

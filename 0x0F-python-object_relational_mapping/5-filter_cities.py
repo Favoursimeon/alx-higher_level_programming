@@ -1,21 +1,44 @@
 #!/usr/bin/python3
-
-'''
-    Script that lists all cities from the database hbtn_0e_4_usa
-    with specified state name
-'''
+""" Script that takes the name of a state as argument and
+    lists all cities of the state
+"""
 
 import MySQLdb
 from sys import argv
 
 if __name__ == "__main__":
-    db = MySQLdb.connect(host="localhost", port=3306, user=argv[1],
-                         passwd=argv[2], db=argv[3], charset="utf8")
-    cursor = db.cursor()
-    cursor.execute("SELECT cities.name FROM cities \
-    JOIN states ON cities.state_id = states.id WHERE states.name LIKE %s \
-    ORDER BY cities.id", (argv[4],))
-    rows = cursor.fetchall()
-    print(", ".join(city[0] for city in rows))
-    cursor.close()
+
+    user_name, password, database, state = argv[1], argv[2], argv[3], argv[4]
+
+    # This establish the connection to the database through the MySQLdb module
+    db = MySQLdb.connect(
+        host="localhost",
+        user=user_name,
+        passwd=password,
+        db=database,
+        port=3306
+    )
+
+    # This create a working environment using the cursor object
+    cursor_object = db.cursor()
+
+    query = """
+    SELECT cities.name
+    FROM cities
+    WHERE cities.state_id = (
+        SELECT states.id
+        FROM states
+        WHERE states.name = %s
+    )
+    ORDER BY cities.id ASC
+    """
+
+    cursor_object.execute(query, (state, ))
+    rows = cursor_object.fetchall()
+    city_names = [row[0] for row in rows]
+
+    city_name_str = ", ".join(city_names)
+    print(city_name_str)
+
+    cursor_object.close()
     db.close()
