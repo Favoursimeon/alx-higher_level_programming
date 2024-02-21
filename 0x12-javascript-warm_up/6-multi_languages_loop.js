@@ -1,11 +1,7 @@
 #!/usr/bin/node
 
-/**
- * Script to print 3 lines with an array/loop.
- */
+const messages = ['C is fun', 'Python is cool', 'JavaScript is amazing'];
 
-const langArray = ['C is fun', 'Python is cool', 'JavaScript is amazing'];
-
-for (let i = 0; i < langArray.length; i++) {
-  console.log(langArray[i]);
+for (const message of messages) {
+  console.log(message);
 }

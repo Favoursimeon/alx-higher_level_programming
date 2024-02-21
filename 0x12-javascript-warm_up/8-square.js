@@ -1,14 +1,13 @@
 #!/usr/bin/node
 
-/**
- * Script that prints a square times x (clarg).
- */
+let firstArgument = process.argv[2];
 
-const fArg = process.argv[2];
-if (isNaN(fArg)) {
+firstArgument = Number(firstArgument);
+
+if (isNaN(firstArgument)) {
   console.log('Missing size');
 } else {
-  for (let i = 0; i < fArg; i++) {
-    console.log('X'.repeat(fArg));
+  for (let i = 0; i < firstArgument; i++) {
+    console.log('X'.repeat(firstArgument));
   }
 }

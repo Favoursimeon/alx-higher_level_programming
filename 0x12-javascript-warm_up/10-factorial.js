@@ -1,15 +1,14 @@
 #!/usr/bin/node
 
-/**
- * Script that computes and prints a factorial.
- */
-
-const fInt = process.argv[2];
-function factorial (a) {
-  if (isNaN(a) || a === 1) {
-    return (1);
-  } else {
-    return (a * factorial(a - 1));
+function factorial (arg) {
+  if (isNaN(arg) || arg === 1) {
+    return 1;
   }
+
+  return arg * factorial(arg - 1);
 }
-console.log(factorial(fInt));
+
+let firstArg = process.argv[2];
+firstArg = Number(firstArg);
+
+console.log(factorial(firstArg));

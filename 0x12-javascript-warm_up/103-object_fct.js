@@ -1,9 +1,4 @@
 #!/usr/bin/node
-
-/**
- * New function `incr` that increments the integer `value`.
- */
-
 const myObject = {
   type: 'object',
   value: 12
